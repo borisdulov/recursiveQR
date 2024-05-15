@@ -1,11 +1,10 @@
 import streamlit as st
 import qrcode
-from io import BytesIO
 from PIL import Image
 
 
 def generate_qr_code(data):
-    # Создаем QR-код
+    # Создаем QR
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -14,19 +13,19 @@ def generate_qr_code(data):
     )
     qr.add_data(data)
     qr.make(fit=True)
+
+    # Преобразуем в изображение
     image = qr.make_image(fill_color="black", back_color="white")
 
-    # # Сохраняем QR-код
-    # image.save(result_path)
-
-    # Возвращаем размер QR-кода
     return image
 
 
 def recurse_qr(inner, outer, scale_factor=1):
+    # Меняем размер внутренного QR, чтобы совпадал с размером внешнего
     ratio = (outer.width * scale_factor) / inner.width
     inner = resize(inner, ratio) 
 
+    # Задаем размеры и создаем рекурсивный QR
     outer_width, outer_height = outer.size
     new_width, new_height = outer_width ** 2 * scale_factor, outer_height ** 2 * scale_factor
     recursive = Image.new('RGB', (new_width, new_height))
@@ -47,23 +46,22 @@ def recurse_qr(inner, outer, scale_factor=1):
 
 
 def resize(image, scale_factor):
-    # image = Image.open(image_path)
     upscaled_image = image.resize((int(image.width * scale_factor), int(image.height * scale_factor)))
 
     return upscaled_image
 
 
 def main():
-    st.title("Генератор рекурсивных QR-кодов")
+    st.title("Recursive QR Generator")
     
     # Ввод данных для кодов
-    data_inner = st.text_input("Введите данные для внутреннего QR-кода:")
-    data_outer = st.text_input("Введите данные для внешнего QR-кода:")
+    data_inner = st.text_input("Data for inner QR:")
+    data_outer = st.text_input("Data for outer QR:")
 
     # Множитель разрешения изображений
-    resolution = st.slider("Разрешение", min_value=1, max_value=10, value=1, step=1)
+    resolution = st.slider("Image scale", min_value=1, max_value=10, value=1, step=1)
     
-    if st.button("Сгенерировать"):
+    if st.button("Generate"):
         # Генерируем внутренний QR
         inner = generate_qr_code(data_inner)
 
@@ -74,14 +72,14 @@ def main():
         recursive = recurse_qr(inner, outer, resolution)
 
         # Отображаем
-        st.markdown("# Результат")
+        st.markdown("# Outcome")
         st.image(recursive, use_column_width=True)
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("## Внутренний")
+            st.markdown("## Inner QR")
             st.image(resize(inner, 10), use_column_width=True)
         with col2:
-            st.markdown("## Внешний")
+            st.markdown("## Outer QR")
             st.image(resize(outer, 10), use_column_width=True)
         
 
