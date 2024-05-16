@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/borisdulov/Documents/Projects/Web/gptcalculator/venv"
+set -gx VIRTUAL_ENV "/Users/borisdulov/Documents/Projects/Web/recursiveQRgenerator/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

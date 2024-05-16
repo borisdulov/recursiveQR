@@ -1,4 +1,4 @@
-#!/Users/borisdulov/Documents/Projects/Web/gptcalculator/venv/bin/python3
+#!/Users/borisdulov/Documents/Projects/Web/recursiveQRgenerator/venv/bin/python3
 
 # http://www.python.org/doc/2.4.4/lib/module-itertools.html
 import itertools
